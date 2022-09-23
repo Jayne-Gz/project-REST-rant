@@ -1,15 +1,23 @@
+require('dotenv').config()
 const express = require('express')
-
 const app = express()
 
-app.get('/', function (req, res) {
-    res.send('Hello World')
+// Express Settings
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jsx')
+app.engine('jsx', require('express-react-views').createEngine())
+app.use(express.static('public'))
+
+// Controllers & Routes
+app.use('/places', require('./controllers/places'))
+
+app.get('/', (req, res) => {
+    res.render('home')
 })
 
-pp.get('/second', function (req, res) {
-    res.send('My Second Page!')
+app.get('*', (req, res) => {
+    res.render('error404')
 })
 
-app.listen(3000, function () {
-    console.log('I am awake!')
-})
+// Listen for Connections
+app.listen(process.env.PORT)
